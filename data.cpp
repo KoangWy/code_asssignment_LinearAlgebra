@@ -54,13 +54,14 @@ void Data::toBalance() {
     if (totalSupply > totalDemand) {
         demand.push_back(totalSupply - totalDemand);
         numDestinations++;
-        cost.push_back(vector<int>(numDestinations, 0));
-    } else if (totalDemand > totalSupply) {
-        supply.push_back(totalDemand - totalSupply);
-        numSources++;
         for (int i = 0; i < numDestinations; ++i) {
             cost[i].push_back(0);
         }
+        
+    } else if (totalDemand > totalSupply) {
+        supply.push_back(totalDemand - totalSupply);
+        numSources++;
+        cost.push_back(vector<int>(numDestinations, 0));
     }
 }
 
