@@ -19,6 +19,7 @@ bool costComparison(const Cell& a, const Cell& b){
 }
 
 int LeastCostMethod(Data& data, vector<vector<int>>& resultCostMatrix) {
+
     int totalCost = 0;  
     int n = data.numDestinations; // Number of shop
     int m = data.numSources; //  Number of supplier
@@ -52,6 +53,7 @@ int LeastCostMethod(Data& data, vector<vector<int>>& resultCostMatrix) {
         if (demand[j] == 0) colDone[j] = true;
     }
     resultCostMatrix = allocator; // Update the result cost matrix
+
     return totalCost;  // Return the result
 }
 
