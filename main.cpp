@@ -19,40 +19,42 @@ bool costComparison(const Cell& a, const Cell& b){
 }
 
 int LeastCostMethod(Data& data, vector<vector<int>>& resultCostMatrix) {
-    int totalCost = 0;
+
+    int totalCost = 0;  
     int n = data.numDestinations; // Number of shop
     int m = data.numSources; //  Number of supplier
-    vector<int> supply = data.supply;
-    vector<int> demand = data.demand;
+    vector<int> supply = data.supply; // Get the supply of the data resource
+    vector<int> demand = data.demand; // Get the demand of the data resource
     vector<vector<int>> cost = data.cost;
-    vector<vector<int>> allocator(m, vector<int>(n , 0)); // Vector m hang n cot toan la 0
+    vector<vector<int>> allocator(m, vector<int>(n , 0)); // Vector m x n filled with 0s
 
-    vector<Cell> cells;
+    vector<Cell> cells; // Cell storage to sort
     for(int i = 0; i < m; i++){
         for(int j = 0; j < n; j++){
             cells.push_back({cost[i][j], i, j});
         }
     }
-    sort(cells.begin(), cells.end(), costComparison);
-    vector<bool> rowDone(m, false), colDone(n, false); // Vector m hang n cot toan la false
-    for(auto & cell : cells){
+    sort(cells.begin(), cells.end(), costComparison); // Sort cells in ascending order accoding to score
+    vector<bool> rowDone(m, false), colDone(n, false); // Vector m x n filled with false
+    for(auto & cell : cells){ // Loop through the cell list
         int i = cell.i, j = cell.j;
         if (rowDone[i] || colDone[j]) { 
             continue;
         }
 
-        int qty = min(supply[i], demand[j]);
-        allocator[i][j] = qty;
-        supply[i]  -= qty;
-        demand[j]  -= qty;
-        totalCost  += qty * cell.cost;
+        int qty = min(supply[i], demand[j]); // Determine if supply or demmand is smaller for a cell 
+        allocator[i][j] = qty;  //  Fulfill a cell
+        supply[i]  -= qty;  // Minus supply for a row
+        demand[j]  -= qty;  // Minus demand for a column
+        totalCost  += qty * cell.cost;   // Add the cost of the cell to the total cost
 
         // If a row or column is exhausted, mark it done
         if (supply[i] == 0) rowDone[i] = true;
         if (demand[j] == 0) colDone[j] = true;
     }
     resultCostMatrix = allocator; // Update the result cost matrix
-    return totalCost;
+
+    return totalCost;  // Return the result
 }
 
 //MODI method
